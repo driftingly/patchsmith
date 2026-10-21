@@ -6,14 +6,53 @@ Patchsmith runs as a dry run by default. Nothing changes on a server until you p
 
 Patchsmith can also audit your servers. The audit reports the installed PHP versions, PHP packages with updates available, and PHP processes still running on a replaced binary.
 
-Patchsmith is a [Laravel Zero](https://laravel-zero.com) console app. You can run it from source or build it into a single executable file.
+Patchsmith is a [Laravel Zero](https://laravel-zero.com) console app. You can download the binary from a release, run it from source, or build the binary yourself.
+
+## Install the binary
+
+The binary needs PHP 8.3 or newer.
+
+1. Download the binary and its checksum from the latest release.
+
+    ```bash
+    curl -LO https://github.com/driftingly/patchsmith/releases/latest/download/patchsmith
+    curl -LO https://github.com/driftingly/patchsmith/releases/latest/download/patchsmith.sha256
+    ```
+
+2. Check the download against the checksum.
+
+    ```bash
+    shasum -a 256 -c patchsmith.sha256
+    ```
+
+    You see `patchsmith: OK`. On Linux without `shasum`, run `sha256sum -c patchsmith.sha256` instead.
+
+3. Make the binary executable and check its version.
+
+    ```bash
+    chmod +x patchsmith
+    ./patchsmith --version
+    ```
+
+4. Optionally, move the binary to a directory on your `PATH`, so you can run `patchsmith` from anywhere.
+
+    ```bash
+    sudo mv patchsmith /usr/local/bin/patchsmith
+    ```
+
+To install a specific version, replace `latest/download` with `download/<tag>` in both URLs, for example `download/v0.1.0`. Every version is listed on the [releases page](https://github.com/driftingly/patchsmith/releases).
 
 ## Requirements
 
-- PHP 8.3 or newer, on your machine and on any machine that runs the built binary.
+To run the binary, you need:
+
+- PHP 8.3 or newer.
+- A Forge API token. To patch, it needs the `organization:view`, `server:view`, and `server:manage-php` scopes. To audit, it needs the `organization:view`, `server:view`, `recipe:view`, `recipe:manage`, and `team:view` scopes. With `--team`, the audit does not need `team:view`.
+
+To run Patchsmith from source or build the binary, you also need:
+
 - Composer 2.
 - Git.
-- A Forge API token. To patch, it needs the `organization:view`, `server:view`, and `server:manage-php` scopes. To audit, it needs the `organization:view`, `server:view`, `recipe:view`, `recipe:manage`, and `team:view` scopes. With `--team`, the audit does not need `team:view`.
 
 ## Set up a development copy
 
@@ -96,7 +135,7 @@ The `builds/` directory is ignored by Git. Attach the binary to a release or cop
 
 ## Run the binary
 
-The binary is a PHP script, so the machine that runs it needs PHP 8.3 or newer. Copy `builds/patchsmith` there and make sure it is executable.
+The binary is a PHP script, so the machine that runs it needs PHP 8.3 or newer. [Download it from a release](#install-the-binary), or copy a binary you built from `builds/patchsmith`, and make sure it is executable.
 
 ### Give Patchsmith your Forge token
 
